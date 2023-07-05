@@ -1,5 +1,7 @@
+CREATE DATABASE "PosTech";
+
 CREATE TABLE "Client" (
-    "cpfcnpj" VARCHAR(14) NOT NULL PRIMARY KEY,
+    "cpfcnpj" VARCHAR(14) PRIMARY KEY,
     "name" VARCHAR(60) NOT NULL,
     "lastname" VARCHAR(60) NOT NULL,
     "phone" VARCHAR(30) NOT NULL,
@@ -15,6 +17,6 @@ CREATE TABLE "Address" (
     "street" VARCHAR(200) NOT NULL,
     "number" VARCHAR(20),
     "neighborhood" VARCHAR(60),
-    "city" VARCHAR(60) NOT NULL,
+    "city" VARCHAR(60) NOT NULL, 
     "uf" CHAR(2) NOT NULL
 );

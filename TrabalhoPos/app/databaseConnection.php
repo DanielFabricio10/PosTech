@@ -1,17 +1,11 @@
 <?php
 
-$dsn = 'mysql:host=my_sql;dbname=PosTech;port=3306;';
-$user = 'root';
-$pass = 'root';
-
+define('DSN', 'mysql:host=my_sql;dbname=PosTech;port=3306;');
+define('USER', 'root');
+define('PASS', 'root');
 
 try {
- 
-    $teste = new PDO($dsn, $user, $pass);
-
-    var_dump($teste);
-
-
+    $connectionDB = new PDO(DSN, USER, PASS);
 } catch(PDOException $e) {
-    echo 'aqui '.$e->getMessage();
+    exit('Erro conexão banco de dados: '.$e->getMessage());
 }
