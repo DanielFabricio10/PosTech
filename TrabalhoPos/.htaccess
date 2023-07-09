@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule api/client/register$ app/infrastructure/api/costumerRegistration.php [L]
+RewriteRule api/client/identify/([^/]*)$ app/infrastructure/api/clientIdentification.php?cpf=$1 [L]
+
+RewriteRule api/product/register$ app/infrastructure/api/productRegistration.php [L]
+RewriteRule api/product/edit/([^/]*)$ app/infrastructure/api/editProduct.php?reference=$1 [L]
+RewriteRule api/product/remove/([^/]*)$ app/infrastructure/api/removeProduct.php?reference=$1 [L]
+RewriteRule api/product/search/([^/]*)$ app/infrastructure/api/searchProduct.php?reference=$1 [L]
+RewriteRule api/product/search/category/([^/]*)$ app/infrastructure/api/listProductByCategory.php?category=$1 [L]
+
+RewriteRule api/order/register$ app/infrastructure/api/orderRegistration.php [L]
+RewriteRule api/order/list$ app/infrastructure/api/listOrders.php [L]
+
+</IfModule>
