@@ -7,7 +7,7 @@ require_once '../../databaseConnection.php';
 
 $auth = base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']);
 
-if(empty($auth) || $auth != 'ZGFuaWVsOnRlc3Rl') {
+if(empty($auth) || $auth != 'cG9zdGVjaDp0ZXN0ZQ==') {
     exit(http_response_code(403));
 }
 
@@ -15,13 +15,13 @@ if(strtoupper($_SERVER['REQUEST_METHOD']) != 'GET') {
     exit(http_response_code(405));
 }
 
-if(empty($_GET['category'])) {
+$category = isset($_GET['category']) && !empty($_GET['category']) ? $_GET['category'] : '';
+
+if(empty($category)) {
     header('Content-Type:application/json');
     http_response_code(400);
     exit('{ "message": "invalid body"}');
 }
-
-$category = $_GET['category'];
 
 use infrastructure\product\FetchProduct;
 
@@ -31,8 +31,7 @@ $returnProduct = $FetchProduct->searchProductByCategory($category);
 if($returnProduct !== false){
 	header('Content-Type:application/json');
 	http_response_code(200);
-	echo ($returnProduct);
-	exit();
+	exit($returnProduct);
 }else{
     header('Content-Type:application/json');
 	http_response_code(400);

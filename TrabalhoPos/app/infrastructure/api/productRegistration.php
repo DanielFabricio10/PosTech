@@ -2,22 +2,12 @@
 
 ini_set('display_errors', 'Off');
 
-/*{
-	"nameProduct": "X-bacon",
-	"description": "Um lanche com hamburguer salada bacon e muito sabor",
-	"category": "Lanches",
-	"reference": "x_bacon",
-	"price": 27.50,
-	"quantity": 15
-
-} */
-
 require_once '../../autoload.php';
 require_once '../../databaseConnection.php';
 
 $auth = base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']);
 
-if(empty($auth) || $auth != 'ZGFuaWVsOnRlc3Rl') {
+if(empty($auth) || $auth != 'cG9zdGVjaDp0ZXN0ZQ==') {
     exit(http_response_code(403));
 }
 
@@ -38,30 +28,24 @@ use infrastructure\product\FetchProduct;
 $FetchProduct = new FetchProduct($connectionDB);
 $returnProduct = $FetchProduct->searchProduct($json->reference);
 
-if($returnProduct !== false){
+if($returnProduct !== false) {
 	header('Content-Type:application/json');
 	http_response_code(400);
-	echo json_encode(['message' => 'Produto já cadastrado no sistema']);
-	exit();
+	exit(json_encode(['message' => 'Produto já cadastrado no sistema']));
 }
 
 use domain\entities\Product;
 use infrastructure\product\RegisterProduct;
 
-$Product = new Product();
-$RegisterProduct = new RegisterProduct($Product, $connectionDB);
+$RegisterProduct = new RegisterProduct(new Product(), $connectionDB);
 $response = $RegisterProduct->registerProduct($json);
 
 if($response === false){
 	header('Content-Type:application/json');
     http_response_code(400);
-    echo json_encode(['message' => 'Erro ao cadastrar produto']);
-    exit();
+    exit(json_encode(['message' => 'Erro ao cadastrar produto']));
 }else{
 	header('Content-Type:application/json');
     http_response_code(200);
-    echo json_encode(['message' => 'Sucesso ao cadastrar produto']);
-    exit();
+    exit(json_encode(['message' => 'Sucesso ao cadastrar produto']));
 }
-
-

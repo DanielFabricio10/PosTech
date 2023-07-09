@@ -40,7 +40,7 @@ class FetchOrder{
             ];
 
             $result2 = $stmt2->fetchAll($this->conn::FETCH_ASSOC);
-
+            $valorTotal = 0;
             foreach ($result2 as $result2) {
 
                 $valorTotal += $result2['price'] * $result2['quantity'];

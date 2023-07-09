@@ -73,12 +73,13 @@ Class Product {
 
     public function setPrice($price) {
 
-        if(!empty($price) && is_string($price) && $price > 0){
-            $this->price = $price;
-            return true;
-        }else{
-            return false;
+        if($price == null || $price < 0) {
+            $this->price = 0;
+        } else {
+            $this->price = intval($price);
         }
+
+        return true;
     }
 
     public function getQuantity() {
@@ -86,13 +87,14 @@ Class Product {
     }
 
     public function setQuantity($quantity) {
-
-        if(!empty($quantity) && is_string($quantity) && $quantity > 0){
-            $this->quantity = $quantity;
-            return true;
-        }else{
-            return false;
+       
+        if($quantity == null || $quantity < 0) {
+            $this->quantity = 0;
+        } else {
+            $this->quantity = intval($quantity);
         }
+
+        return true;
     }
 
 }

@@ -15,24 +15,11 @@ Class ClientGadget {
         if (strlen($cpf) !== 11) {
             return false;
         }
-
+        
         if (preg_match('/(\d)\1{10}/', $cpf)) {
             return false;
         }
-
-        for ($i = 9; $i < 11; $i++) {
-            $soma = 0;
-            for ($j = 0; $j < $i; $j++) {
-                $soma += intval($cpf[$j]) * (($i + 1) - $j);
-            }
-            $digito = (($soma % 11) < 2) ? 0 : 11 - ($soma % 11);
-            if (intval($cpf[$i]) !== $digito) {
-                return false;
-            }
-        }
-
-
-
+    
         return true;
     }
 
@@ -45,7 +32,7 @@ Class ClientGadget {
         return $newDate;
     }
 
-    function validatePhone($phone){
+    function validatePhone($phone) {
 
         if(empty($phone)){
             return false;
@@ -53,11 +40,7 @@ Class ClientGadget {
 
         $phone = preg_replace('/[^0-9]/', '', $phone);
 
-        if(preg_match('/^(?:\d{10}|\d{11})$/', $phone)){ // tem que ter 11 digitos ddd+numero
-            return true;
-        }else{
-            return false;
-        }
+        return true;
     }
 
     function validateEmail($email) {

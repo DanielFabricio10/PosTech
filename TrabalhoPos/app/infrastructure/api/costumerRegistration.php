@@ -1,29 +1,13 @@
 <?php
-ini_set('display_errors', 'Off');
 
-/*{
-	"cpf": 1124214,
-	"name": "danilo",
-	"lastName": "salles",
-	"dateOfBirth": "2000/02/16",
-	"phone": 997533471,
-	"email": "danilo.ti@precode.com.br",
-	"adress": {
-		"street": "rua matinhos",
-		"number": 962,
-		"zipcode": 87045170,
-		"neighborhood": "Vila Nova",
-		"city": "maringa",
-		"uf": "pr"
-	}
-}*/
+ini_set('display_errors', 'Off');
 
 require_once '../../autoload.php';
 require_once '../../databaseConnection.php';
 
 $auth = base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']);
 
-if(empty($auth) || $auth != 'ZGFuaWVsOnRlc3Rl') {
+if(empty($auth) || $auth != 'cG9zdGVjaDp0ZXN0ZQ==') {
     exit(http_response_code(403));
 }
 
@@ -40,14 +24,13 @@ if(empty($json)) {
 }
 use infrastructure\client\FetchClient;
 
-$FetchClient = new FetchClient($connectionDB);
+$FetchClient  = new FetchClient($connectionDB);
 $returnClient = $FetchClient->clientIdentification($json->cpf);
 
 if($returnClient !== false){
 	header('Content-Type:application/json');
 	http_response_code(400);
-	echo json_encode(['message' => 'Cpf do cliente já está cadastrado']);
-	exit();
+	exit(json_encode(['message' => 'Cpf do cliente já está cadastrado']));
 }
 
 use domain\entities\Client;
@@ -63,12 +46,9 @@ $response = $RegisterClient->registerClient($json);
 if($response === false){
 	header('Content-Type:application/json');
     http_response_code(400);
-    echo json_encode(['message' => 'Erro ao cadastrar cliente']);
-    exit();
+    exit(json_encode(['message' => 'Erro ao cadastrar cliente']));
 }else{
 	header('Content-Type:application/json');
     http_response_code(200);
-    echo json_encode(['message' => 'Sucesso ao cadastrar cliente']);
-    exit();
+    exit(json_encode(['message' => 'Sucesso ao cadastrar cliente']));
 }
-

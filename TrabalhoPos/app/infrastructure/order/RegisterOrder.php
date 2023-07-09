@@ -61,11 +61,12 @@ Class RegisterOrder{
     function validateProduct(){
 
         $responseProduct = $this->fetchProduct->searchProduct($this->product->getReference());
-        $responseProduct = json_decode($responseProduct);
 
-        if($responseProduct === false){
+        if(is_null($responseProduct) || $responseProduct === false) {
             return (Object)['status' => 0, 'message' => 'Produto não encontrado na base' ];
         }
+
+        $responseProduct = json_decode($responseProduct);
 
         if($responseProduct->quantity <= 0){
             return (Object)['status' => 0, 'message' => 'Produto não tem estoque' ];

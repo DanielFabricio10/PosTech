@@ -2,24 +2,12 @@
 
 ini_set('display_errors', 'Off');
 
-/*
-    {
-	"nameProduct": "X-bacons",
-	"description": "Um lanche com hamburguer salada bacon e muito sabor",
-	"category": "Lanches",
-	"reference": "asfasf",
-	"price": "27.50",
-	"quantity":"15"
-
-}
-*/
-
 require_once '../../autoload.php';
 require_once '../../databaseConnection.php';
 
 $auth = base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']);
 
-if(empty($auth) || $auth != 'ZGFuaWVsOnRlc3Rl') {
+if(empty($auth) || $auth != 'cG9zdGVjaDp0ZXN0ZQ==') {
     exit(http_response_code(403));
 }
 
@@ -27,13 +15,13 @@ if(strtoupper($_SERVER['REQUEST_METHOD']) != 'PUT') {
     exit(http_response_code(405));
 }
 
-if(empty($_GET['reference'])) {
+$reference = isset($_GET['reference']) && !empty($_GET['reference']) ? $_GET['reference'] : '';
+
+if(empty($reference)) {
     header('Content-Type:application/json');
     http_response_code(400);
     exit('{ "message": "invalid body"}');
 }
-
-$reference = $_GET['reference'];
 
 $json = json_decode(file_get_contents('php://input'));
 
@@ -46,32 +34,28 @@ if(empty($json)) {
 use infrastructure\product\FetchProduct;
 
 $FetchProduct = new FetchProduct($connectionDB);
-$returnProduct = $FetchProduct->searchProduct($json->reference);
+$returnProduct = $FetchProduct->searchProduct($reference);
 
-if($returnProduct === false){
+if($returnProduct === false) {
 	header('Content-Type:application/json');
 	http_response_code(400);
-	echo json_encode(['message' => 'Produto não encontrado no sistema']);
-	exit();
+	exit(json_encode(['message' => 'Produto não encontrado no sistema']));
 }
 
 use domain\entities\Product;
 use infrastructure\product\EditProduct;
 
-$Product = new Product();
-$EditProduct = new EditProduct($Product, $connectionDB);
+$EditProduct = new EditProduct(new Product(), $connectionDB);
 $response = $EditProduct->editProduct($json, $returnProduct);
 
-if($response === false){
+if($response === false) {
 	header('Content-Type:application/json');
     http_response_code(400);
-    echo json_encode(['message' => 'Erro ao atualizar produto, os campos estão iguais']);
-    exit();
+    exit(json_encode(['message' => 'Erro ao atualizar produto, os campos estão iguais']));
 }else{
 	header('Content-Type:application/json');
     http_response_code(200);
-    echo json_encode(['message' => 'Sucesso ao atualizar produto']);
-    exit();
+    exit(json_encode(['message' => 'Sucesso ao atualizar produto']));
 }
 
 

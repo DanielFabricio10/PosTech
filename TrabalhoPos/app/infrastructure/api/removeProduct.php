@@ -7,7 +7,7 @@ require_once '../../databaseConnection.php';
 
 $auth = base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']);
 
-if(empty($auth) || $auth != 'ZGFuaWVsOnRlc3Rl') {
+if(empty($auth) || $auth != 'cG9zdGVjaDp0ZXN0ZQ==') {
     exit(http_response_code(403));
 }
 
@@ -15,13 +15,13 @@ if(strtoupper($_SERVER['REQUEST_METHOD']) != 'DELETE') {
     exit(http_response_code(405));
 }
 
-if(empty($_GET['reference'])) {
+$reference = isset($_GET['reference']) && !empty($_GET['reference']) ? $_GET['reference'] : '';
+
+if(empty($reference)) {
     header('Content-Type:application/json');
     http_response_code(400);
     exit('{ "message": "invalid body"}');
 }
-
-$reference = $_GET['reference'];
 
 use infrastructure\product\FetchProduct;
 
@@ -31,26 +31,21 @@ $returnProduct = $FetchProduct->searchProduct($reference);
 if($returnProduct === false){
 	header('Content-Type:application/json');
 	http_response_code(400);
-	echo json_encode(['message' => 'Produto não encontrado no sistema']);
-	exit();
+	exit(json_encode(['message' => 'Produto não encontrado no sistema']));
 }
-
 
 use domain\entities\Product;
 use infrastructure\product\RemoveProduct;
 
-$Product = new Product();
-$RemoveProduct = new RemoveProduct($Product, $connectionDB);
+$RemoveProduct = new RemoveProduct(new Product(), $connectionDB);
 $response = $RemoveProduct->removeProduct($reference);
 
 if($response === false){
 	header('Content-Type:application/json');
     http_response_code(400);
-    echo json_encode(['message' => 'Erro ao deletar produto']);
-    exit();
+    exit(json_encode(['message' => 'Erro ao deletar produto']));
 }else{
 	header('Content-Type:application/json');
     http_response_code(200);
-    echo json_encode(['message' => 'Sucesso ao deletar produto']);
-    exit();
+    exit(json_encode(['message' => 'Sucesso ao deletar produto']));
 }
