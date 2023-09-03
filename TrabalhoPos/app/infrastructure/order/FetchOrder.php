@@ -18,10 +18,6 @@ class FetchOrder{
 
         $result = $stmt->fetchAll($this->conn::FETCH_ASSOC);
 
-        if(empty($result)){
-            return false;
-        }
-
         $arrayOrder = [];
 
         foreach ($result as $result) {
