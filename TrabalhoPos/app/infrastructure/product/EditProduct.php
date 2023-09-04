@@ -44,14 +44,13 @@ Class EditProduct {
         $price = $this->product->getPrice();
         $quantity = $this->product->getQuantity();
 
-        $stmt = $this->conn->prepare('UPDATE Product SET nameproduct = :nameproduct, description = :description, category = :category, price = :price, quantity = :quantity WHERE reference = :reference');
+        $stmt = $this->conn->prepare('UPDATE Product SET nameproduct = :nameproduct, description = :description, category = :category, price = :price WHERE reference = :reference');
 
         $stmt->bindParam(':nameproduct', $nameProduct);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':category', $category);
         $stmt->bindParam(':price', $price);
         $stmt->bindParam(':reference', $reference);
-        $stmt->bindParam(':quantity', $quantity);
 
         $stmt->execute();
 

@@ -27,7 +27,7 @@ use infrastructure\client\FetchClient;
 $FetchClient  = new FetchClient($connectionDB);
 $returnClient = $FetchClient->clientIdentification($json->cpf);
 
-if($returnClient !== false){
+if($returnClient !== false) {
 	header('Content-Type:application/json');
 	http_response_code(400);
 	exit(json_encode(['message' => 'Cpf do cliente já está cadastrado']));
@@ -35,7 +35,7 @@ if($returnClient !== false){
 
 use domain\entities\Client;
 use domain\entities\Adress;
-use infrastructure\client\RegisterClient;
+use application\useCases\RegisterClient;
 
 $Client = new Client();
 $Adress = new Adress();
@@ -43,11 +43,11 @@ $Adress = new Adress();
 $RegisterClient = new RegisterClient($Client, $Adress, $connectionDB);
 $response = $RegisterClient->registerClient($json);
 
-if($response === false){
+if($response === false) {
 	header('Content-Type:application/json');
     http_response_code(400);
     exit(json_encode(['message' => 'Erro ao cadastrar cliente']));
-}else{
+} else {
 	header('Content-Type:application/json');
     http_response_code(200);
     exit(json_encode(['message' => 'Sucesso ao cadastrar cliente']));

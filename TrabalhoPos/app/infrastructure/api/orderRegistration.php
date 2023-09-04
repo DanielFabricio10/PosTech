@@ -27,19 +27,31 @@ use domain\entities\Order;
 use domain\entities\Adress;
 use domain\entities\Client;
 use domain\entities\Product;
-use infrastructure\order\RegisterOrder;
+
+use application\useCases\RegisterOrder;
 use infrastructure\client\FetchClient;
+use infrastructure\order\OrderPayments;
+
 use infrastructure\product\FetchProduct;
 
 $RegisterOrder = new RegisterOrder(new Client(), new FetchClient($connectionDB), new Adress(), new Product(), new FetchProduct($connectionDB), new Order(), $connectionDB);
 $response = $RegisterOrder->registerClient($json);
 
+header('Content-Type:application/json');
+
 if($response->status != 1) {
-    header('Content-Type:application/json');
     http_response_code(400);
-    exit('{ "message": "'.$response->message.'"}');
-}else{
-    header('Content-Type:application/json');
-    http_response_code(200);
-    exit('{ "message": "'.$response->message.'"}');
+} else {
+
+     $payments = new OrderPayments($connectionDB);
+     $retorno  = $payments->checkoutPedido(preg_replace('/[^0-9]/', '', $response->message));    
+
+     if(!isset($retorno->qrCode)) {
+        http_response_code(400);
+        exit(json_encode(['message' => 'Pedido cancelado', 'Erro' => 'Não foi possivel gerar pagamento']));
+     } else {
+        http_response_code(200);
+        exit(json_encode(['message' => $response->message, 'status' => 'Aguardando Pagamento', 'qrCode' => str_replace(' ', '', $retorno->qrCode)]));
+     }
 }
+

@@ -13,7 +13,7 @@ class FetchOrder{
 
     function searchOrder(){
 
-        $stmt = $this->conn->prepare("SELECT * FROM `Order`");
+        $stmt = $this->conn->prepare("SELECT * FROM `Order` WHERE statuspedido NOT LIKE 'finalizado' ORDER BY CASE WHEN statuspedido = 'Pronto' THEN 1 WHEN statuspedido = 'Em preparacao' THEN 2 WHEN statuspedido = 'Recebido' THEN 3 END");
         $stmt->execute();
 
         $result = $stmt->fetchAll($this->conn::FETCH_ASSOC);
@@ -56,6 +56,30 @@ class FetchOrder{
 
 
          return json_encode($arrayOrder);
+    }
+
+    function searchOrderById($id) {
+
+        $stmt3 = $this->conn->prepare("SELECT * FROM `Order` WHERE idpedido = :idpedido");
+        $stmt3->bindParam(':idpedido', $id);
+
+        $stmt3->execute();
+
+        $result3 = $stmt3->fetch($this->conn::FETCH_ASSOC);
+
+        if(intval($result3['idpedido']) > 0) {
+
+            $jsonPedido = [
+                'ID' => $result3['idpedido'],
+                'CPF' => $result3['cpfcnpj'],
+                'OrderStatus' => $result3['statuspedido']
+            ];
+
+        } else {
+            $jsonPedido = ['message' => 'Pedido '.$id.' não encontrado'];
+        }
+        
+        return json_encode($jsonPedido);
     }
 
 }

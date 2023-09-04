@@ -35,9 +35,10 @@ if($returnProduct !== false) {
 }
 
 use domain\entities\Product;
-use infrastructure\product\RegisterProduct;
+use application\useCases\RegisterProduct;
 
-$RegisterProduct = new RegisterProduct(new Product(), $connectionDB);
+$Product = new Product();
+$RegisterProduct = new RegisterProduct($Product, $connectionDB);
 $response = $RegisterProduct->registerProduct($json);
 
 if($response === false){
@@ -47,5 +48,5 @@ if($response === false){
 }else{
 	header('Content-Type:application/json');
     http_response_code(200);
-    exit(json_encode(['message' => 'Sucesso ao cadastrar produto']));
+	exit(json_encode(['message' => 'Sucesso ao cadastrar produto']));
 }

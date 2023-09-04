@@ -57,5 +57,3 @@ if($response === false) {
     http_response_code(200);
     exit(json_encode(['message' => 'Sucesso ao atualizar produto']));
 }
-
-

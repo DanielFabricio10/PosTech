@@ -5,11 +5,9 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11555414"
 	},
-	"item": [
-		{
+	"item": [{
 			"name": "Client",
-			"item": [
-				{
+			"item": [{
 					"name": "Register Customer",
 					"request": {
 						"method": "POST",
@@ -61,15 +59,14 @@
 		},
 		{
 			"name": "Order",
-			"item": [
-				{
+			"item": [{
 					"name": "Register Order",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cpf\": \"10499248945\",\r\n    \"products\": [\r\n        {\r\n            \"reference\": \"x_bacon\",\r\n            \"quantity\": 2\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"cpf\": \"11769472908\",\r\n    \"products\": [\r\n        {\r\n            \"reference\": \"x_bacon\",\r\n            \"quantity\": 2\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -108,13 +105,61 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "List Order By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/order/list/{idOrder}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"list",
+								"{idOrder}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hook Update Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderCode\": 10,\r\n    \"status\": \"approved\",\r\n    \"data\": \"2023-09-03 22:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/order/update/hook",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"update",
+								"hook"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
 			"name": "Product",
-			"item": [
-				{
+			"item": [{
 					"name": "Register Product",
 					"request": {
 						"method": "POST",
@@ -202,14 +247,42 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Edit Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameProduct\": \"X-bacon 2\",\r\n    \"description\": \"Um lanche com hamburguer salada bacon e muito sabor\",\r\n    \"category\": \"Lanches\",\r\n    \"reference\": \"x_bacon\",\r\n    \"price\": 27.50,\r\n    \"quantity\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/product/edit/{reference}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"edit",
+								"{reference}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
 	],
 	"auth": {
 		"type": "basic",
-		"basic": [
-			{
+		"basic": [{
 				"key": "password",
 				"value": "teste",
 				"type": "string"
@@ -221,8 +294,7 @@
 			}
 		]
 	},
-	"event": [
-		{
+	"event": [{
 			"listen": "prerequest",
 			"script": {
 				"type": "text/javascript",
@@ -241,10 +313,8 @@
 			}
 		}
 	],
-	"variable": [
-		{
-			"key": "url",
-			"value": "http://localhost"
-		}
-	]
+	"variable": [{
+		"key": "url",
+		"value": "http://localhost"
+	}]
 }

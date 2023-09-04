@@ -62,7 +62,7 @@ Class Client extends ClientGadget {
     }
 
     public function setPhone($phone) {
-       
+
         if($this->validatePhone($phone) === true){
             $this->phone = $phone;
             return true;

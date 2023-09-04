@@ -17,9 +17,16 @@ if(strtoupper($_SERVER['REQUEST_METHOD']) != 'GET') {
 
 use infrastructure\order\FetchOrder;
 
-$FetchOrder  = new FetchOrder($connectionDB);
-$returnOrder = $FetchOrder->searchOrder();
+$FetchOrder = new FetchOrder($connectionDB);
 
+if(isset($_GET['pedido']) && !empty($_GET['pedido'])) {
+    $returnOrder = $FetchOrder->searchOrderById($_GET['pedido']);
+}else{
+    $returnOrder = $FetchOrder->searchOrder();
+}
 header('Content-Type:application/json');
 http_response_code(200);
-echo($returnOrder);
+echo ($returnOrder);
+
+
+

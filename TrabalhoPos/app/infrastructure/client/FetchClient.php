@@ -4,9 +4,9 @@ namespace infrastructure\client;
 
 use domain\entities\Client;
 
-class FetchClient extends Client {
+class FetchClient extends Client{
 
-    private $conn;
+    protected $conn;
 
     function __construct($conn){
 
