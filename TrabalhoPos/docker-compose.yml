@@ -1,26 +1,10 @@
 version: '3'
-
 services:
-  php:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: php
+  app:
+    image: php:8.2-apache
     ports:
-      - "80:80"
-      - "443:443"
+      - "8000:80"
     volumes:
-      - ".:/var/www/html"
-    links:
-      - database
+      - /home/ec2-user/TrabalhoPos/:/sg
+    command: ["apachectl", "-D", "FOREGROUND"]
 
-  database:
-    image: mysql:5.7
-    restart: always
-    container_name: my_sql
-    ports:
-      - "3306:3306"
-    volumes:
-      - /var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
